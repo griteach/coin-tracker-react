@@ -216,7 +216,7 @@ function Coin(){
 
 
         {/* 라우트 안에 라우트를 사용하기 위한 방식 */}
-        <Outlet />
+        <Outlet context={{coinId}}/>
       </>
     }
     </Container>
