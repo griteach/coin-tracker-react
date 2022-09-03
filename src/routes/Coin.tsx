@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
+import { Link, Outlet, Route, Routes, useLocation, useParams, useMatch } from "react-router-dom";
 import styled from "styled-components";
 import Chart from "./Chart";
 import Price from "./Price";
@@ -54,6 +54,27 @@ const Description = styled.p`
     margin:20px 0px;
 `;
 
+
+const Tabs = styled.div`
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 25px 0px;
+    gap: 10px;
+
+`;
+
+const Tab = styled.span<{isActive: boolean}>`
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 12px;
+    background-color: rgba(0,0,0,0.5);
+    padding: 7px 0px;
+    border-radius: 10px;
+    a {
+        display: block;
+    }
+    color:${props => props.isActive ? props.theme.accentColor : props.theme.textColor};
+`;
 
 
 interface RouterState{
@@ -124,6 +145,9 @@ function Coin(){
     const [priceInfo, setPriceInfo] = useState<PriceData>();
     const location = useLocation();
     const currentCoin = location.state as RouterState;
+    const priceMatch = useMatch("/:coinId/price");
+    const chartMatch = useMatch("/:coinId/chart");
+    
         
     useEffect(() => {
         (
@@ -152,7 +176,7 @@ function Coin(){
             <span>Rank:</span>
             <span>{info?.rank}</span>
           </OverviewItem>
-          <OverviewItem>
+              <OverviewItem>
             <span>Symbol:</span>
             <span>${info?.symbol}</span>
           </OverviewItem>
@@ -173,6 +197,17 @@ function Coin(){
           </OverviewItem>
         </Overview>
         
+
+        <Tabs>
+            <Tab isActive={chartMatch !== null}>
+                <Link to={`/${coinId}/chart`}>Chart</Link>
+            </Tab>
+            <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}>Price</Link>
+            </Tab>
+        </Tabs>
+
+
         {/* 라우트 안에 라우트를 사용하기 위한 방식 */}
         <Outlet />
       </>
