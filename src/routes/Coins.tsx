@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { createSolutionBuilder } from 'typescript';
+import { fetchCoins } from '../api';
 
 
 const Container = styled.div`
@@ -64,7 +66,7 @@ const Title = styled.h1`
 `;
 
 
-interface CoinInterface{
+interface ICoin{
     id: string,
     name: string,
     symbol: string,
@@ -76,7 +78,7 @@ interface CoinInterface{
 
 function Coins(){
 
-    const [coins, setCoins] = useState<CoinInterface[]>([]);
+/*     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
     const getCoins = async () =>{
         const res = await axios("https://api.coinpaprika.com/v1/coins");
@@ -85,15 +87,17 @@ function Coins(){
     }
     useEffect(() => {
         getCoins();
-    }, [])
+    }, []) */
 
+    //useQuery는 기본적으로 isLoading을 가지고 있으며 결과에 따라 이를 반납해준다 ㅋㅋ
+    const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
     return (
         <Container>
         <Header>
         <Title>Coins</Title>
         </Header>
-        {loading? <Loader>Loading...</Loader> : <CoinsList>
-            {coins.map(coin => <Coin key={coin.id}>
+        {isLoading? <Loader>Loading...</Loader> : <CoinsList>
+            {data?.slice(0,100).map(coin => <Coin key={coin.id}>
                 <Link to={`/${coin.id}`} state={{name:coin.name, rank:coin.rank}}>
                     <CoinWrapper>
                         <Img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}/>

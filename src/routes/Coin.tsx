@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link, Outlet, Route, Routes, useLocation, useParams, useMatch } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoinInfo } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -140,13 +142,18 @@ interface InfoData {
 
 function Coin(){
     const {coinId} = useParams();
-    const [loading, setLoading] = useState(true);
-    const [info, setInfo] = useState<InfoData>();
-    const [priceInfo, setPriceInfo] = useState<PriceData>();
     const location = useLocation();
     const currentCoin = location.state as RouterState;
     const priceMatch = useMatch("/:coinId/price");
     const chartMatch = useMatch("/:coinId/chart");
+
+    const { isLoading:infoLoading, data:infoData } = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId!));
+    const { isLoading:tickersLoading, data:tickersData } = useQuery<PriceData>(["tickers", coinId], () => fetchCoinInfo(coinId!));
+
+    /* 
+    const [loading, setLoading] = useState(true);
+    const [info, setInfo] = useState<InfoData>();
+    const [priceInfo, setPriceInfo] = useState<PriceData>();
     
         
     useEffect(() => {
@@ -163,37 +170,37 @@ function Coin(){
 
     }, [])
 
-
+ */
     
     return <Container>
     <Header>
-    <Title>{currentCoin?.name ? currentCoin.name : loading? "Loading..." : info?.name}</Title>
+    <Title>{currentCoin?.name ? currentCoin.name : infoLoading? "Loading..." : infoData?.name}</Title>
     </Header>
-    {loading? <Loader>Loading...</Loader>: 
+    {infoLoading? <Loader>Loading...</Loader>: 
         <>
         <Overview>
           <OverviewItem>
             <span>Rank:</span>
-            <span>{info?.rank}</span>
+            <span>{infoData?.rank}</span>
           </OverviewItem>
               <OverviewItem>
             <span>Symbol:</span>
-            <span>${info?.symbol}</span>
+            <span>${infoData?.symbol}</span>
           </OverviewItem>
           <OverviewItem>
             <span>Open Source:</span>
-            <span>{info?.open_source ? "Yes" : "No"}</span>
+            <span>{infoData?.open_source ? "Yes" : "No"}</span>
           </OverviewItem>
         </Overview>
-        <Description>{info?.description}</Description>
+        <Description>{infoData?.description}</Description>
         <Overview>
           <OverviewItem>
             <span>Total Suply:</span>
-            <span>{priceInfo?.total_supply}</span>
+            <span>{tickersData?.total_supply}</span>
           </OverviewItem>
           <OverviewItem>
             <span>Max Supply:</span>
-            <span>{priceInfo?.max_supply}</span>
+            <span>{tickersData?.max_supply}</span>
           </OverviewItem>
         </Overview>
         
