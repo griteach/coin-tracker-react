@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { Link, Outlet, Route, Routes, useLocation, useParams, useMatch } from "react-router-dom";
 import styled from "styled-components";
-import { fetchCoinInfo } from "../api";
-import Chart from "./Chart";
-import Price from "./Price";
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
 
-
+import { Helmet } from "react-helmet";
+ 
 const Container = styled.div`
     padding: 0px 20px;
     max-width:480px;
@@ -148,8 +147,14 @@ function Coin(){
     const chartMatch = useMatch("/:coinId/chart");
 
     const { isLoading:infoLoading, data:infoData } = useQuery<InfoData>(["info", coinId], () => fetchCoinInfo(coinId!));
-    const { isLoading:tickersLoading, data:tickersData } = useQuery<PriceData>(["tickers", coinId], () => fetchCoinInfo(coinId!));
-
+    const { isLoading:tickersLoading, data:tickersData } = useQuery<PriceData>(
+        ["tickers", coinId], 
+        () => fetchCoinTickers(coinId!),
+        {
+            refetchInterval:5000,
+        }
+        );
+    
     /* 
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
@@ -173,6 +178,9 @@ function Coin(){
  */
     
     return <Container>
+        <Helmet>
+            <title>{currentCoin?.name ? currentCoin.name : infoLoading? "Loading..." : infoData?.name}</title>
+        </Helmet>
     <Header>
     <Title>{currentCoin?.name ? currentCoin.name : infoLoading? "Loading..." : infoData?.name}</Title>
     </Header>
@@ -188,8 +196,8 @@ function Coin(){
             <span>${infoData?.symbol}</span>
           </OverviewItem>
           <OverviewItem>
-            <span>Open Source:</span>
-            <span>{infoData?.open_source ? "Yes" : "No"}</span>
+            <span>Price:</span>
+            <span>{`$${tickersData?.quotes.USD.price}`}</span>
           </OverviewItem>
         </Overview>
         <Description>{infoData?.description}</Description>

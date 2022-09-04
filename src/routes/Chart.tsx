@@ -22,7 +22,13 @@ interface IHistorical{
 
 function Chart(){
     const {coinId} = useOutletContext<ChartProps>();
-    const { isLoading, data } = useQuery<IHistorical[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId));
+    const { isLoading, data } = useQuery<IHistorical[]>(
+        ["ohlcv", coinId], 
+        () => fetchCoinHistory(coinId),
+        {
+            refetchInterval:10000,
+        }
+        );
     
     return <div>{isLoading? "Loading chart..." : <Apexchart 
     type="line" 
@@ -63,10 +69,23 @@ function Chart(){
             },
             axisBorder:{
                 show:false,
-            }
+            },
+            type:"datetime",
+            categories:data?.map(price => new Date(price.time_close*1000).toISOString()),
         },
         yaxis:{
             show:false,
+        },
+        fill:{
+            type:"gradient",
+            gradient:{gradientToColors:["#1dd1a1"], stops:[0,70]},
+
+        },
+        colors:["#54a0ff"],
+        tooltip:{
+            y:{
+                formatter:(value)=>`$${value.toFixed(3)}`
+            }
         }
         
     }} />}</div>
