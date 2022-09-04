@@ -16,6 +16,7 @@ const Container = styled.div`
 
 const Header = styled.div`
     height:10vh;
+    margin: 30px 0px 25px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,7 +95,7 @@ function Coins(){
     const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
     return (
         <Container>
-            <Helmet>
+        <Helmet>
             <title>Coins</title>
         </Helmet>
         <Header>
