@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Table from "./components/Table";
 import Chart from "./routes/Chart";
 import Coin from "./routes/Coin";
 import Coins from "./routes/Coins";
@@ -14,7 +15,7 @@ function Router(){
         </Routes>
         <Routes>
             <Route path="/:coinId" element={<Coin />}>
-                <Route path="price" element={<Price />}></Route>
+                <Route path="table" element={<Table />}></Route>
                 <Route path="chart" element={<Chart />}></Route>
             </Route>
         </Routes>

@@ -19,7 +19,7 @@ const Container = styled.div`
 
 const NavBar = styled.div`
     margin-top:15px;
-    color:${props => props.theme.accentColor};
+    color:${props => props.theme.textColor};
     height:3vh;
     display: flex;
     justify-content: space-between;
@@ -32,7 +32,7 @@ const NavBar = styled.div`
 
 const Header = styled.div`
     height:10vh;
-    margin: 30px 0px 25px 0px;
+    margin: 20px 0px 20px 0px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -160,27 +160,14 @@ interface InfoData {
 function getTime(){
     const date = new Date();
             const month = date.getMonth();
-
-            // 달을 받아옵니다 
             const clockDate = date.getDate();
-
-            // 몇일인지 받아옵니다 
             const day = date.getDay();
-
-            // 요일을 받아옵니다. 
-            const week = ['일', '월', '화', '수', '목', '금', '토'];
-
-            // 요일은 숫자형태로 리턴되기때문에 미리 배열을 만듭니다. 
+            const week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const month_en = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             const hours = date.getHours();
-
-            // 시간을 받아오고 
             const minutes = date.getMinutes();
-
-            // 분도 받아옵니다.
             const seconds = date.getSeconds();
-
-            // 초까지 받아온후 
-            return `${month+1}월 ${clockDate}일 ${week[day]}요일 ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }:${seconds < 10 ? `0${seconds }`  : seconds }`;
+            return `${month_en[month]} ${clockDate} ${week[day]} ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }:${seconds < 10 ? `0${seconds }`  : seconds }`;
 }
 
 
@@ -188,7 +175,7 @@ function Coin(){
     const {coinId} = useParams();
     const location = useLocation();
     const currentCoin = location.state as RouterState;
-    const priceMatch = useMatch("/:coinId/price");
+    const priceMatch = useMatch("/:coinId/table");
     const chartMatch = useMatch("/:coinId/chart");
 
     //timer
@@ -213,6 +200,8 @@ function Coin(){
         }
         );
     
+    
+
     /* 
     const [loading, setLoading] = useState(true);
     const [info, setInfo] = useState<InfoData>();
@@ -253,6 +242,7 @@ function Coin(){
           <OverviewItem>
             <span>Rank:</span>
             <span>{infoData?.rank}</span>
+            
           </OverviewItem>
               <OverviewItem>
             <span>Symbol:</span>
@@ -281,7 +271,7 @@ function Coin(){
                 <Link to={`/${coinId}/chart`}>Chart</Link>
             </Tab>
             <Tab isActive={priceMatch !== null}>
-                <Link to={`/${coinId}/price`}>Price</Link>
+                <Link to={`/${coinId}/table`}>Details</Link>
             </Tab>
         </Tabs>
 
