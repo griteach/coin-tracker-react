@@ -33,7 +33,7 @@ const CoinsList = styled.ul`
 
 const Coin = styled.li`
     background-color: white;
-    color:${props => props.theme.bgColor};
+    color:${props => props.theme.textColor};
     
     border-radius: 20px;
     margin-bottom: 15px;
@@ -91,6 +91,9 @@ function Coins(){
         getCoins();
     }, []) */
 
+
+    
+
     //useQuery는 기본적으로 isLoading을 가지고 있으며 결과에 따라 이를 반납해준다 ㅋㅋ
     const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
     return (
@@ -99,7 +102,11 @@ function Coins(){
             <title>Coins</title>
         </Helmet>
         <Header>
+        
         <Title>Coins</Title>
+        <button>
+      Toggle Mode
+    </button>
         </Header>
         {isLoading? <Loader>Loading...</Loader> : <CoinsList>
             {data?.slice(0,100).map(coin => <Coin key={coin.id}>

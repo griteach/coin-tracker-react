@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Router from './Router';
 import { createGlobalStyle } from 'styled-components';
 import { ReactQueryDevtools } from 'react-query/devtools';
-
+import { ThemeProvider } from 'styled-components';
+import {darkTheme, lightTheme} from './theme';
 
 const GlobalStyle = createGlobalStyle`
   /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -68,12 +69,18 @@ a{
 }
 `;
 
+
+
+
 function App() {
-  return (<>
+  const [isDark, setIsDark] = useState(true);
+  const toggleDark = () => setIsDark(current => !current);
+
+  return (<><ThemeProvider theme={isDark? darkTheme:lightTheme}>
     <GlobalStyle />
     <Router />
     <ReactQueryDevtools initialIsOpen={true} />
-    </>
+    </ThemeProvider></>
   );
 }
 
