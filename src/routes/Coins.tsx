@@ -78,7 +78,13 @@ interface ICoin{
     type: string,
 }
 
-function Coins(){
+
+
+interface ICoinProps{
+    toggleDark:()=>void;
+}
+
+function Coins({toggleDark}:ICoinProps){
 
 /*     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
@@ -92,7 +98,6 @@ function Coins(){
     }, []) */
 
 
-    
 
     //useQuery는 기본적으로 isLoading을 가지고 있으며 결과에 따라 이를 반납해준다 ㅋㅋ
     const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
@@ -104,8 +109,8 @@ function Coins(){
         <Header>
         
         <Title>Coins</Title>
-        <button>
-      Toggle Mode
+        <button onClick={toggleDark}>
+      Toggle Dark Mode
     </button>
         </Header>
         {isLoading? <Loader>Loading...</Loader> : <CoinsList>
