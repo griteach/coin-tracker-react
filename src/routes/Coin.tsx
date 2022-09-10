@@ -170,8 +170,12 @@ function getTime(){
             return `${month_en[month]} ${clockDate} ${week[day]} ` + `${hours < 10 ? `0${hours}` : hours}:${minutes < 10 ? `0${minutes }`  : minutes }:${seconds < 10 ? `0${seconds }`  : seconds }`;
 }
 
+interface ICoinProps{
+    isDark:boolean;
+}
 
-function Coin(){
+
+function Coin({isDark}:ICoinProps){
     const {coinId} = useParams();
     const location = useLocation();
     const currentCoin = location.state as RouterState;

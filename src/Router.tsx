@@ -7,11 +7,12 @@ import Price from "./routes/Price";
 
 interface IRouterProps{
     toggleDark:()=>void;
+    isDark:boolean;
 }
 
 
 
-function Router({ toggleDark }:IRouterProps){
+function Router({ toggleDark, isDark }:IRouterProps){
 
     return (
     <BrowserRouter>
@@ -19,9 +20,9 @@ function Router({ toggleDark }:IRouterProps){
             <Route path="/" element={<Coins toggleDark={toggleDark} />}></Route>
         </Routes>
         <Routes>
-            <Route path="/:coinId" element={<Coin />}>
+            <Route path="/:coinId" element={<Coin isDark={isDark} />}>
                 <Route path="table" element={<Table />}></Route>
-                <Route path="chart" element={<Chart />}></Route>
+                <Route path="chart" element={<Chart  />}></Route>
             </Route>
         </Routes>
     </BrowserRouter>)
