@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { createSolutionBuilder } from 'typescript';
 import { fetchCoins } from '../api';
+import { isDarkAtom } from '../atoms';
 
 
 const Container = styled.div`
@@ -67,6 +69,43 @@ const Title = styled.h1`
 
 `;
 
+const ToggleDarkBackGround = styled.div`
+    margin-left: 20px;
+    background:#53FF4C;
+    width:70px;
+    height:30px;
+    border:1px solid #53FF4C;
+    border-radius:15px;
+
+`;
+const ToggleWhiteBackGround = styled.div`
+    margin-left: 20px;
+    background:#CCCCCC;
+    width:70px;
+    height:30px;
+    border:1px solid #CCCCCC;
+    border-radius:15px;
+
+`;
+const ToggleDark = styled.button`
+    background:#FFFFFF;
+    width:30px;
+    height:30px;
+    border:none;
+    border-radius:15px;
+    position:relative;
+    left:40px;
+`;
+
+const ToggleWhite = styled.button`
+    background:#FFFFFF;
+    width:30px;
+    height:30px;
+    border:none;
+    border-radius:15px;
+    position:relative;
+    left:0px;
+`;
 
 interface ICoin{
     id: string,
@@ -80,11 +119,8 @@ interface ICoin{
 
 
 
-interface ICoinProps{
-    toggleDark:()=>void;
-}
 
-function Coins({toggleDark}:ICoinProps){
+function Coins(){
 
 /*     const [coins, setCoins] = useState<CoinInterface[]>([]);
     const [loading, setLoading] = useState(true);
@@ -100,6 +136,9 @@ function Coins({toggleDark}:ICoinProps){
 
 
     //useQuery는 기본적으로 isLoading을 가지고 있으며 결과에 따라 이를 반납해준다 ㅋㅋ
+    const isDark = useRecoilValue(isDarkAtom);
+    const setDarkAtom =  useSetRecoilState(isDarkAtom);
+    const toggleDarkAtom = () => setDarkAtom(prev => !prev);
     const { isLoading, data } = useQuery<ICoin[]>(["allCoins"], fetchCoins);
     return (
         <Container>
@@ -109,9 +148,13 @@ function Coins({toggleDark}:ICoinProps){
         <Header>
         
         <Title>Coins</Title>
-        <button onClick={toggleDark}>
-      Toggle Dark Mode
-    </button>
+
+        
+            {isDark? <ToggleDarkBackGround><ToggleDark onClick={toggleDarkAtom}>
+            </ToggleDark></ToggleDarkBackGround> : <ToggleWhiteBackGround><ToggleWhite onClick={toggleDarkAtom}>
+            </ToggleWhite></ToggleWhiteBackGround>}
+        
+        
         </Header>
         {isLoading? <Loader>Loading...</Loader> : <CoinsList>
             {data?.slice(0,100).map(coin => <Coin key={coin.id}>

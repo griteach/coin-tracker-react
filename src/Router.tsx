@@ -12,15 +12,15 @@ interface IRouterProps{
 
 
 
-function Router({ toggleDark, isDark }:IRouterProps){
+function Router(){
 
     return (
     <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Coins toggleDark={toggleDark} />}></Route>
+            <Route path="/" element={<Coins />}></Route>
         </Routes>
         <Routes>
-            <Route path="/:coinId" element={<Coin isDark={isDark} />}>
+            <Route path="/:coinId" element={<Coin />}>
                 <Route path="table" element={<Table />}></Route>
                 <Route path="chart" element={<Chart  />}></Route>
             </Route>
